@@ -1,6 +1,5 @@
 # Build output
 build
-dist
 
 # Coverage directory
 coverage
