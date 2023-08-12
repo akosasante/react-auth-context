@@ -14,6 +14,7 @@ npm i @akosasante/react-auth-context axios react-router-dom
 ## Usage
 
 1. Wrap your app with `AuthProvider` to be able to use the auth functionality from this library and with `BrowserRouter` to be able to use react-router redirections:
+
 ```jsx
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { AuthProvider } from '@guoyunhe/react-auth';

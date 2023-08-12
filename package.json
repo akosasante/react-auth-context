@@ -43,9 +43,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix --ext js,jsx",
     "preview": "vite preview",
+    "format": "npx prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch"
   },

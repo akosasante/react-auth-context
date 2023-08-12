@@ -6,7 +6,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
-    'prettier'
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   overrides: [
@@ -14,8 +14,8 @@ module.exports = {
       files: ['*.test.ts', '*.test.tsx', '*.test.jsx', '*.test.js'],
       plugins: ['jest'],
       extends: ['plugin:jest/recommended'],
-      env: { 'jest/globals': true }
-    }
+      env: { 'jest/globals': true },
+    },
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
@@ -26,4 +26,4 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-}
+};
