@@ -4,9 +4,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:compat/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
-    'prettier',
+    'prettier'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   overrides: [
@@ -19,7 +20,7 @@ module.exports = {
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'compat'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
