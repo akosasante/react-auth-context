@@ -8,7 +8,7 @@ This repo implements React Context components & hooks for authentication. To be 
 ## Install
 
 ```bash
-npm i @akosasante/react-auth-context axios react-router-dom
+npm i akosasante/react-auth-context axios react-router-dom
 ```
 
 ## Usage
