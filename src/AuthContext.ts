@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { AuthStatus } from './AuthStatus';
-import {AxiosRequestConfig} from "axios";
+import { AxiosRequestConfig } from 'axios';
 
 export interface AuthContextValue<U = unknown> {
   status: AuthStatus;
@@ -12,7 +12,7 @@ export interface AuthContextValue<U = unknown> {
   fetchUser: () => void;
   loginPath: string;
   logoutRedirectPath: string;
-  defaultAxiosOptions?: AxiosRequestConfig
+  defaultAxiosOptions?: AxiosRequestConfig;
 }
 
 export const AuthContext = createContext<AuthContextValue>({

@@ -7,9 +7,9 @@ module.exports = {
     'plugin:compat/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
-    'prettier'
+    'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.js'],
   overrides: [
     {
       files: ['*.test.ts', '*.test.tsx', '*.test.jsx', '*.test.js'],
@@ -25,6 +25,10 @@ module.exports = {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
+    ],
+    'no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
   },
 };

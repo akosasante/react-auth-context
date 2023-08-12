@@ -44,23 +44,23 @@ const App = () => {
 ```jsx
 const UserProfile = () => {
   /**
-  * user will be undefined if not logged in, otherwise, it will be the return value
-  * of the `getUser` function performed by the AuthProvider, or the login/register functions
-  * if those were performed
-  *
-  * status is one of the following:
-  * 'not_sure' - Initial value when it hasn't been verified by back-end yet,
-  * 'logged_in' - The user has logged in,
-  * 'not_logged_in' - Fetch user request happened and confirmed user is not logged in,
-  * 'logged_out' - The user has manually logged out.
-  **/
+   * user will be undefined if not logged in, otherwise, it will be the return value
+   * of the `getUser` function performed by the AuthProvider, or the login/register functions
+   * if those were performed
+   *
+   * status is one of the following:
+   * 'not_sure' - Initial value when it hasn't been verified by back-end yet,
+   * 'logged_in' - The user has logged in,
+   * 'not_logged_in' - Fetch user request happened and confirmed user is not logged in,
+   * 'logged_out' - The user has manually logged out.
+   **/
 
   const { user, status } = useAuth();
 
   return (
     <div>
       <h1>User Profile</h1>
-      { status === 'logged_in' ? <p>{user?.name}</p> : <p>Please login</p> }
+      {status === 'logged_in' ? <p>{user?.name}</p> : <p>Please login</p>}
     </div>
   );
 };
@@ -93,7 +93,10 @@ const Login = () => {
     errorHandler: (error) => console.log(error),
     apiUrl: 'http://localhost:8080/api/login',
     getJwtTokenFromResponse: false,
-    actionAxiosOptions: { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+    actionAxiosOptions: {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    },
   });
 
   return (
@@ -105,12 +108,12 @@ const Login = () => {
         <button type="submit" disabled={loading}>
           Login
         </button>
-</form>
+      </form>
       {errors && <p>{errors}</p>}
     </div>
   );
 };
-````
+```
 
 4. Use the `useRequireAuth` hook to redirect users to the login page if they're not logged in:
 
@@ -129,7 +132,9 @@ const MyComponent = () => {
   return (
     <div>
       <h1>My Component</h1>
-      <button onClick={handleClick}>Action Button (for logged-in users only!)</button>
+      <button onClick={handleClick}>
+        Action Button (for logged-in users only!)
+      </button>
     </div>
   );
 };
@@ -143,7 +148,14 @@ Alternatively, use the RequireAuth component in your router to wrap your compone
     <Switch>
       <Route path="/login" element={<Login />} />
       <Route path="/profile" element={<UserProfile />} />
-      <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        }
+      />
     </Switch>
   </AuthProvider>
 </BrowserRouter>

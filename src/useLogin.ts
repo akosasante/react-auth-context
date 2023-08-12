@@ -18,11 +18,12 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
     apiUrl = '/login',
     getUserFromResponse = (data: any) => data?.user,
     getJwtTokenFromResponse = (data: any) => data?.token?.token || data?.token,
-    actionAxiosOptions = null
+    actionAxiosOptions = null,
   } = options || {};
 
   // extract auth context
-  const { setStatus, setUser, setToken, fetchUser, defaultAxiosOptions } = useAuth();
+  const { setStatus, setUser, setToken, fetchUser, defaultAxiosOptions } =
+    useAuth();
 
   // set up state
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,11 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
   const submit = () => {
     setLoading(true);
     axios
-      .post(apiUrl, requestBody, actionAxiosOptions || defaultAxiosOptions || {})
+      .post(
+        apiUrl,
+        requestBody,
+        actionAxiosOptions || defaultAxiosOptions || {},
+      )
       .then((res) => {
         setStatus(AuthStatus.LoggedIn);
         if (typeof getUserFromResponse === 'function') {

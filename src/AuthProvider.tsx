@@ -1,8 +1,8 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { AuthStatus } from './AuthStatus';
-import useLocalStorage from "./useLocalStorage";
+import useLocalStorage from './useLocalStorage';
 import React from 'react';
 
 export interface AuthProviderProps {
@@ -26,10 +26,13 @@ export function AuthProvider({
   getCurrentUserPath = '/user',
   loginPath = '/login',
   logoutRedirectPath = '/',
-  defaultAxiosOptions = {}
+  defaultAxiosOptions = {},
 }: AuthProviderProps) {
   const promiseRef = useRef<Promise<any>>();
-  const [status, setStatus] = useLocalStorage('auth_status', AuthStatus.NotSure);
+  const [status, setStatus] = useLocalStorage(
+    'auth_status',
+    AuthStatus.NotSure,
+  );
   const [user, setUser] = useLocalStorage<any>('auth_user', null);
   const [token, setToken] = useLocalStorage<string | null>('auth_token', null);
   const [shouldFetchUser, setShouldFetchUser] = useState(0);
@@ -46,7 +49,7 @@ export function AuthProvider({
         setUser(res.data);
       })
       .catch((reason) => {
-        console.error(reason)
+        console.error(reason);
         setStatus(AuthStatus.NotLoggedIn);
       });
   }, []);
@@ -83,7 +86,7 @@ export function AuthProvider({
         fetchUser: () => setShouldFetchUser((prev) => prev + 1),
         loginPath,
         logoutRedirectPath,
-        defaultAxiosOptions
+        defaultAxiosOptions,
       }}
     >
       {children}

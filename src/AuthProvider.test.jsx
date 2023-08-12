@@ -1,10 +1,9 @@
-import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import { AuthStatus } from "./AuthStatus.ts";
-import { AuthProvider } from "./AuthProvider";
+import { AuthStatus } from './AuthStatus.ts';
+import { AuthProvider } from './AuthProvider';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { useAuth } from "./useAuth";
+import { useAuth } from './useAuth';
 
 const renderAppWithStatusAndUser = () => {
   // Create a test component that consumes the Context
@@ -14,20 +13,21 @@ const renderAppWithStatusAndUser = () => {
       <div>
         <p>{status}</p>
         <p>{user?.user?.name}</p>
-      </div>);
+      </div>
+    );
   };
 
-// Wrap the test component with the Context Provider
+  // Wrap the test component with the Context Provider
   const App = () => {
     return (
       <AuthProvider>
-        <TestComponent/>
+        <TestComponent />
       </AuthProvider>
     );
   };
 
-  return render(<App/>);
-}
+  return render(<App />);
+};
 
 const renderAppWithStatus = () => {
   // Create a test component that consumes the Context
@@ -36,53 +36,60 @@ const renderAppWithStatus = () => {
     return (
       <div>
         <p>{status}</p>
-      </div>);
+      </div>
+    );
   };
 
-// Wrap the test component with the Context Provider
+  // Wrap the test component with the Context Provider
   const App = () => {
     return (
       <AuthProvider>
-        <TestComponent/>
+        <TestComponent />
       </AuthProvider>
     );
   };
 
-  return render(<App/>);
-}
+  return render(<App />);
+};
 
 let axiosMock;
 beforeEach(() => {
-// This sets the mock adapter on the default instance
+  // This sets the mock adapter on the default instance
   axiosMock = new MockAdapter(axios);
 });
 
 test('renders the component when wrapped with Context', async () => {
-  axiosMock.onGet('/user').reply(200, {users: [{id: 1, name: 'John Smith'}]});
+  axiosMock
+    .onGet('/user')
+    .reply(200, { users: [{ id: 1, name: 'John Smith' }] });
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
     const _authContext = useAuth();
-    return <div><p>HI</p></div>;
+    return (
+      <div>
+        <p>HI</p>
+      </div>
+    );
   };
 
-// Wrap the test component with the Context Provider
+  // Wrap the test component with the Context Provider
   const App = () => {
     return (
       <AuthProvider value={null}>
-        <TestComponent/>
+        <TestComponent />
       </AuthProvider>
     );
   };
 
   await act(async () => {
-    render(<App/>);
+    render(<App />);
   });
-    expect(screen.getByText('HI')).toBeInTheDocument();
+  expect(screen.getByText('HI')).toBeInTheDocument();
 });
 
 test('if no user is found on initial render, set status to not-logged-in', async () => {
-  axiosMock.onGet('/user').reply(404, {message: "User not found"});
+  axiosMock.onGet('/user').reply(404, { message: 'User not found' });
 
   await act(async () => {
     renderAppWithStatus();
@@ -91,7 +98,7 @@ test('if no user is found on initial render, set status to not-logged-in', async
 });
 
 test('if user is found on initial render, set status to logged in', async () => {
-  axiosMock.onGet('/user').reply(200, {user: {id: 1, name: 'John Smith'}});
+  axiosMock.onGet('/user').reply(200, { user: { id: 1, name: 'John Smith' } });
 
   await act(async () => {
     renderAppWithStatus();
@@ -100,7 +107,9 @@ test('if user is found on initial render, set status to logged in', async () => 
 });
 
 test('if a different getUser path is provided, use that instead', async () => {
-  axiosMock.onGet('/showCurrentUser').reply(200, {user: {id: 1, name: 'John Smith'}});
+  axiosMock
+    .onGet('/showCurrentUser')
+    .reply(200, { user: { id: 1, name: 'John Smith' } });
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
@@ -108,28 +117,29 @@ test('if a different getUser path is provided, use that instead', async () => {
     return (
       <div>
         <p>{status}</p>
-      </div>);
+      </div>
+    );
   };
 
-// Wrap the test component with the Context Provider
+  // Wrap the test component with the Context Provider
   const App = () => {
     return (
       <AuthProvider getCurrentUserPath={'/showCurrentUser'}>
-        <TestComponent/>
+        <TestComponent />
       </AuthProvider>
     );
   };
 
   await act(async () => {
-    render(<App/>);
+    render(<App />);
   });
   expect(screen.getByText(AuthStatus.LoggedIn)).toBeInTheDocument();
   const request = axiosMock.history.get[0];
   expect(request.url).toBe('/showCurrentUser');
 });
 
-test('if a different getUser path is provided, use that instead', async () => {
-  axiosMock.onGet('/user').reply(200, {user: {id: 1, name: 'John Smith'}});
+test('if axios options are passed in, use them', async () => {
+  axiosMock.onGet('/user').reply(200, { user: { id: 1, name: 'John Smith' } });
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
@@ -137,30 +147,31 @@ test('if a different getUser path is provided, use that instead', async () => {
     return (
       <div>
         <p>{status}</p>
-      </div>);
+      </div>
+    );
   };
 
-// Wrap the test component with the Context Provider
+  // Wrap the test component with the Context Provider
   const App = () => {
-    const customAxiosRequestOptions = { headers: {"My-Header": "My-Value"} }
+    const customAxiosRequestOptions = { headers: { 'My-Header': 'My-Value' } };
     return (
       <AuthProvider defaultAxiosOptions={customAxiosRequestOptions}>
-        <TestComponent/>
+        <TestComponent />
       </AuthProvider>
     );
   };
 
   await act(async () => {
-    render(<App/>);
+    render(<App />);
   });
   expect(screen.getByText(AuthStatus.LoggedIn)).toBeInTheDocument();
   const request = axiosMock.history.get[0];
-  expect(request.headers).toMatchObject({"My-Header": "My-Value"});
+  expect(request.headers).toMatchObject({ 'My-Header': 'My-Value' });
 });
 
 test('if fetch user is successful, should be able to grab user name from context and render', async () => {
-  const user = {id: 1, name: 'John Smith'}
-  axiosMock.onGet('/user').reply(200, {user});
+  const user = { id: 1, name: 'John Smith' };
+  axiosMock.onGet('/user').reply(200, { user });
 
   await act(async () => {
     renderAppWithStatusAndUser();
@@ -168,4 +179,3 @@ test('if fetch user is successful, should be able to grab user name from context
   expect(screen.getByText(AuthStatus.LoggedIn)).toBeInTheDocument();
   expect(screen.getByText(user.name)).toBeInTheDocument();
 });
-
