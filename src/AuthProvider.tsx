@@ -8,7 +8,7 @@ import React from 'react';
 export interface AuthProviderProps {
   /** Child elements */
   children: ReactNode;
-  /** Inverval timeout (ms) to verify authentication status. 0 (disabled) by default. */
+  /** Interval timeout (ms) to verify authentication status. 0 (disabled) by default. */
   fetchUserInterval?: number;
   /** Route path to get current user */
   getCurrentUserPath?: string;
