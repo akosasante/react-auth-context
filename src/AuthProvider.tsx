@@ -3,6 +3,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { AuthStatus } from './AuthStatus';
 import useLocalStorage from "./useLocalStorage";
+import React from 'react';
 
 export interface AuthProviderProps {
   /** Child elements */
