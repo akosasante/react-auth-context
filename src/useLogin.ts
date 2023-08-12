@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
 import { AuthStatus } from './AuthStatus';
 import { useAuth } from './useAuth';
@@ -6,34 +6,44 @@ import { useAuth } from './useAuth';
 export interface UseLoginOptions {
   errorHandler?: (reason: any) => void;
   apiUrl?: string;
-  getUser?: ((data: any) => any) | false;
-  getToken?: ((data: any) => string) | false;
+  getUserFromResponse?: ((data: any) => any) | false;
+  getJwtTokenFromResponse?: ((data: any) => string) | false;
+  actionAxiosOptions?: AxiosRequestConfig;
 }
 
-export function useLogin(data: any, options?: UseLoginOptions) {
+export function useLogin(requestBody: any, options?: UseLoginOptions) {
+  // extract options
   const {
-    errorHandler,
+    errorHandler = (reason: any) => console.error(reason),
     apiUrl = '/login',
-    getUser = (data: any) => data?.user,
-    getToken = (data: any) => data?.token?.token || data?.token,
+    getUserFromResponse = (data: any) => data?.user,
+    getJwtTokenFromResponse = (data: any) => data?.token?.token || data?.token,
+    actionAxiosOptions = null
   } = options || {};
-  const { setStatus, setUser, setToken, fetchUser } = useAuth();
+
+  // extract auth context
+  const { setStatus, setUser, setToken, fetchUser, defaultAxiosOptions } = useAuth();
+
+  // set up state
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<any>(null);
+
+  // login submit function
+  // same logic is also used for register
   const submit = () => {
     setLoading(true);
     axios
-      .post(apiUrl, data)
+      .post(apiUrl, requestBody, actionAxiosOptions || defaultAxiosOptions || {})
       .then((res) => {
         setStatus(AuthStatus.LoggedIn);
-        if (typeof getUser === 'function') {
-          setUser(getUser(res.data));
+        if (typeof getUserFromResponse === 'function') {
+          setUser(getUserFromResponse(res.data));
         } else {
           // if the login api doesn't return user object, fetch user
           fetchUser();
         }
-        if (typeof getToken === 'function') {
-          setToken(getToken(res.data));
+        if (typeof getJwtTokenFromResponse === 'function') {
+          setToken(getJwtTokenFromResponse(res.data));
         }
         setErrors(null);
       })

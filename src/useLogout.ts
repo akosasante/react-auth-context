@@ -9,8 +9,8 @@ export interface UseLogoutOptions {
 }
 
 export function useLogout(options?: UseLogoutOptions) {
-  const { errorHandler, apiUrl = '/logout' } = options || {};
-  const { setStatus } = useAuth();
+  const { errorHandler = (reason: any) => console.error(reason), apiUrl = '/logout' } = options || {};
+  const { setStatus, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const submit = () => {
     setLoading(true);
@@ -18,6 +18,7 @@ export function useLogout(options?: UseLogoutOptions) {
       .post(apiUrl)
       .then(() => {
         setStatus(AuthStatus.LoggedOut);
+        setUser(null)
       })
       .catch(errorHandler)
       .finally(() => {

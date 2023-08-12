@@ -1,46 +1,51 @@
-import { useStorage } from '@guoyunhe/react-storage';
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { AuthStatus } from './AuthStatus';
+import useLocalStorage from "./useLocalStorage";
 
 export interface AuthProviderProps {
   /** Child elements */
   children: ReactNode;
   /** Inverval timeout (ms) to verify authentication status. 0 (disabled) by default. */
   fetchUserInterval?: number;
+  /** Route path to get current user */
+  getCurrentUserPath?: string;
   /** Route path to login page */
   loginPath?: string;
   /** Where to redirect after logout from a protected page */
   logoutRedirectPath?: string;
+  /** Axios request config to use in all calls (unless overridden) */
+  defaultAxiosOptions?: AxiosRequestConfig;
 }
 
 export function AuthProvider({
   children,
   fetchUserInterval = 0,
+  getCurrentUserPath = '/user',
   loginPath = '/login',
   logoutRedirectPath = '/',
+  defaultAxiosOptions = {}
 }: AuthProviderProps) {
   const promiseRef = useRef<Promise<any>>();
-  const [status, setStatus] = useStorage('auth_status', AuthStatus.NotSure);
-  const [user, setUser] = useStorage<any>('auth_user', null);
-  const [token, setToken] = useStorage<string | null>('auth_token', null);
+  const [status, setStatus] = useLocalStorage('auth_status', AuthStatus.NotSure);
+  const [user, setUser] = useLocalStorage<any>('auth_user', null);
+  const [token, setToken] = useLocalStorage<string | null>('auth_token', null);
   const [shouldFetchUser, setShouldFetchUser] = useState(0);
 
   if (token) {
     axios.defaults.headers['Authorization'] = `Bearer ${token}`;
-  } else {
-    axios.defaults.headers['Authorization'] = '';
   }
 
   const fetchUser = useCallback(() => {
     promiseRef.current = axios
-      .get('/user')
+      .get(getCurrentUserPath, defaultAxiosOptions)
       .then((res) => {
         setStatus(AuthStatus.LoggedIn);
         setUser(res.data);
       })
-      .catch(() => {
+      .catch((reason) => {
+        console.error(reason)
         setStatus(AuthStatus.NotLoggedIn);
       });
   }, []);
@@ -77,6 +82,7 @@ export function AuthProvider({
         fetchUser: () => setShouldFetchUser((prev) => prev + 1),
         loginPath,
         logoutRedirectPath,
+        defaultAxiosOptions
       }}
     >
       {children}
