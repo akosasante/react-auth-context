@@ -4,6 +4,7 @@ import { AuthProvider } from './AuthProvider';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { useAuth } from './useAuth';
+import React from 'react';
 
 const renderAppWithStatusAndUser = () => {
   // Create a test component that consumes the Context
