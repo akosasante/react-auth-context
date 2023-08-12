@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
-import { AuthContext } from "./AuthContext";
+import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { AuthStatus } from "./AuthStatus.ts";
 import { AuthProvider } from "./AuthProvider";
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { useAuth } from "./useAuth";
 
 const renderAppWithStatusAndUser = () => {
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const { status, user } = useContext(AuthContext);
+    const { status, user } = useAuth();
     return (
       <div>
         <p>{status}</p>
@@ -32,7 +32,7 @@ const renderAppWithStatusAndUser = () => {
 const renderAppWithStatus = () => {
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const { status } = useContext(AuthContext);
+    const { status } = useAuth();
     return (
       <div>
         <p>{status}</p>
@@ -62,7 +62,7 @@ test('renders the component when wrapped with Context', async () => {
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const _authContext = useContext(AuthContext);
+    const _authContext = useAuth();
     return <div><p>HI</p></div>;
   };
 
@@ -104,7 +104,7 @@ test('if a different getUser path is provided, use that instead', async () => {
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const { status } = useContext(AuthContext);
+    const { status } = useAuth();
     return (
       <div>
         <p>{status}</p>
@@ -133,7 +133,7 @@ test('if a different getUser path is provided, use that instead', async () => {
 
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const { status } = useContext(AuthContext);
+    const { status } = useAuth();
     return (
       <div>
         <p>{status}</p>

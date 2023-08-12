@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { AuthContext } from "./AuthContext";
+import React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { AuthStatus } from "./AuthStatus.ts";
 import { AuthProvider } from "./AuthProvider";
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { useLogin } from "./useLogin.ts";
+import { useAuth } from "./useAuth.ts";
 
 
 let axiosMock;
@@ -33,7 +33,7 @@ test('if login is successful, should be able to grab user name from context and 
     const [password, _setPassword] = React.useState(defaultPassword);
 
     const { submit, _errors, _loading } = useLogin({ email, password}, {getJwtTokenFromResponse: false});
-    const { status, user } = useContext(AuthContext);
+    const { status, user } = useAuth();
 
     return (
       <div>
@@ -69,7 +69,6 @@ test('if login is successful, should be able to grab user name from context and 
 });
 
 test('if login is fails, should be able to grab error from context and render', async () => {
-  const user = {id: 1, name: 'John Smith'}
   const defaultEmail = 'testEmail@example.com';
   const defaultPassword = 'testPassword';
 
@@ -86,7 +85,7 @@ test('if login is fails, should be able to grab error from context and render', 
     const [password, _setPassword] = React.useState(defaultPassword);
 
     const { submit, errors, _loading } = useLogin({ email, password}, {getJwtTokenFromResponse: false});
-    const { status, user } = useContext(AuthContext);
+    const { status, user } = useAuth();
 
     return (
       <div>
