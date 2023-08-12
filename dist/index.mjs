@@ -1,10 +1,10 @@
 import { jsx as S, Fragment as w } from "react/jsx-runtime";
 import U from "axios";
-import { createContext as F, useState as d, useEffect as I, useRef as q, useCallback as O, useContext as C } from "react";
+import { createContext as F, useState as d, useEffect as I, useRef as q, useCallback as O, useContext as y } from "react";
 import { useLocation as A, Navigate as _, useNavigate as P } from "react-router-dom";
-var r = /* @__PURE__ */ ((t) => (t.NotSure = "not_sure", t.LoggedIn = "logged_in", t.NotLoggedIn = "not_logged_in", t.LoggedOut = "logged_out", t))(r || {});
+var s = /* @__PURE__ */ ((t) => (t.NotSure = "not_sure", t.LoggedIn = "logged_in", t.NotLoggedIn = "not_logged_in", t.LoggedOut = "logged_out", t))(s || {});
 const b = F({
-  status: r.NotSure,
+  status: s.NotSure,
   setStatus: () => null,
   user: null,
   setUser: () => null,
@@ -15,43 +15,47 @@ const b = F({
   logoutRedirectPath: "/",
   defaultAxiosOptions: null
 }), x = (t, e) => {
-  const [o, s] = d(() => {
+  const [o, r] = d(() => {
     const u = localStorage.getItem(t);
-    return u ? JSON.parse(u) : e;
+    try {
+      return u ? JSON.parse(u) : e;
+    } catch (l) {
+      return console.error("Invalid JSON:", l), e;
+    }
   });
   return I(() => {
-    localStorage.setItem(t, JSON.stringify(o));
-  }, [t, o]), [o, s];
+    localStorage.setItem(t, o ? JSON.stringify(o) : "{}");
+  }, [t, o]), [o, r];
 };
-function V({
+function j({
   children: t,
   fetchUserInterval: e = 0,
   getCurrentUserPath: o = "/user",
-  loginPath: s = "/login",
+  loginPath: r = "/login",
   logoutRedirectPath: u = "/",
-  defaultAxiosOptions: c = {}
+  defaultAxiosOptions: l = {}
 }) {
-  const i = q(), [f, a] = x(
+  const c = q(), [f, a] = x(
     "auth_status",
-    r.NotSure
-  ), [k, L] = x("auth_user", null), [h, R] = x("auth_token", null), [N, v] = d(0);
+    s.NotSure
+  ), [k, L] = x("auth_user", null), [h, v] = x("auth_token", null), [N, R] = d(0);
   h && (U.defaults.headers.Authorization = `Bearer ${h}`);
   const g = O(() => {
-    i.current = U.get(o, c).then((l) => {
-      a(r.LoggedIn), L(l.data);
-    }).catch((l) => {
-      console.error(l), a(r.NotLoggedIn);
+    c.current = U.get(o, l).then((i) => {
+      a(s.LoggedIn), L(i.data);
+    }).catch((i) => {
+      console.error(i), a(s.NotLoggedIn);
     });
   }, []);
   if (I(() => {
     g();
   }, [g, N]), I(() => {
-    let l = 0;
-    return e > 0 && (l = window.setInterval(g, Math.max(e, 3e3))), () => {
-      clearInterval(l);
+    let i = 0;
+    return e > 0 && (i = window.setInterval(g, Math.max(e, 3e3))), () => {
+      clearInterval(i);
     };
-  }, [g, e]), f === r.NotSure && i.current)
-    throw i.current;
+  }, [g, e]), f === s.NotSure && c.current)
+    throw c.current;
   return /* @__PURE__ */ S(
     b.Provider,
     {
@@ -61,85 +65,85 @@ function V({
         user: k,
         setUser: L,
         token: h,
-        setToken: R,
-        fetchUser: () => v((l) => l + 1),
-        loginPath: s,
+        setToken: v,
+        fetchUser: () => R((i) => i + 1),
+        loginPath: r,
         logoutRedirectPath: u,
-        defaultAxiosOptions: c
+        defaultAxiosOptions: l
       },
       children: t
     }
   );
 }
 function p() {
-  return C(b);
+  return y(b);
 }
-function j({ to: t }) {
-  var s, u;
+function z({ to: t }) {
+  var r, u;
   const e = p(), o = A();
-  return e.status === r.LoggedIn ? /* @__PURE__ */ S(_, { to: ((u = (s = o.state) == null ? void 0 : s.from) == null ? void 0 : u.pathname) || t || "/" }) : null;
+  return e.status === s.LoggedIn ? /* @__PURE__ */ S(_, { to: ((u = (r = o.state) == null ? void 0 : r.from) == null ? void 0 : u.pathname) || t || "/" }) : null;
 }
-function z({ children: t }) {
-  const e = p(), o = A(), s = P();
+function B({ children: t }) {
+  const e = p(), o = A(), r = P();
   return I(() => {
-    e.status === r.LoggedOut && (s(e.logoutRedirectPath), e.setStatus(r.NotLoggedIn));
-  }, [e, s]), e.status === r.NotLoggedIn ? /* @__PURE__ */ S(_, { to: e.loginPath, state: { from: o } }) : /* @__PURE__ */ S(w, { children: t });
+    e.status === s.LoggedOut && (r(e.logoutRedirectPath), e.setStatus(s.NotLoggedIn));
+  }, [e, r]), e.status === s.NotLoggedIn ? /* @__PURE__ */ S(_, { to: e.loginPath, state: { from: o } }) : /* @__PURE__ */ S(w, { children: t });
 }
-function T(t, e) {
+function C(t, e) {
   const {
     errorHandler: o = (n) => console.error(n),
-    apiUrl: s = "/login",
+    apiUrl: r = "/login",
     getUserFromResponse: u = (n) => n == null ? void 0 : n.user,
-    getJwtTokenFromResponse: c = (n) => {
+    getJwtTokenFromResponse: l = (n) => {
       var m;
       return ((m = n == null ? void 0 : n.token) == null ? void 0 : m.token) || (n == null ? void 0 : n.token);
     },
-    actionAxiosOptions: i = null
-  } = e || {}, { setStatus: f, setUser: a, setToken: k, fetchUser: L, defaultAxiosOptions: h } = p(), [R, N] = d(!1), [v, g] = d(null);
+    actionAxiosOptions: c = null
+  } = e || {}, { setStatus: f, setUser: a, setToken: k, fetchUser: L, defaultAxiosOptions: h } = p(), [v, N] = d(!1), [R, g] = d(null);
   return { submit: () => {
     N(!0), U.post(
-      s,
+      r,
       t,
-      i || h || {}
+      c || h || {}
     ).then((n) => {
-      f(r.LoggedIn), typeof u == "function" ? a(u(n.data)) : L(), typeof c == "function" && k(c(n.data)), g(null);
+      f(s.LoggedIn), typeof u == "function" ? a(u(n.data)) : L(), typeof l == "function" && k(l(n.data)), g(null);
     }).catch((n) => {
       var m;
       g(((m = n.response) == null ? void 0 : m.data) || n.message || "Unknown error"), o && o(n);
     }).finally(() => {
       N(!1);
     });
-  }, loading: R, errors: v };
+  }, loading: v, errors: R };
 }
-function B(t) {
+function M(t) {
   const {
     errorHandler: e = (a) => console.error(a),
     apiUrl: o = "/logout"
-  } = t || {}, { setStatus: s, setUser: u } = p(), [c, i] = d(!1);
+  } = t || {}, { setStatus: r, setUser: u } = p(), [l, c] = d(!1);
   return { submit: () => {
-    i(!0), U.post(o).then(() => {
-      s(r.LoggedOut), u(null);
+    c(!0), U.post(o).then(() => {
+      r(s.LoggedOut), u(null);
     }).catch(e).finally(() => {
-      i(!1);
+      c(!1);
     });
-  }, loading: c };
+  }, loading: l };
 }
-function M(t, e) {
-  const { apiUrl: o = "/register", ...s } = e || {};
-  return T(t, { apiUrl: o, ...s });
+function V(t, e) {
+  const { apiUrl: o = "/register", ...r } = e || {};
+  return C(t, { apiUrl: o, ...r });
 }
 function $() {
   const t = p(), e = A(), o = P();
-  return O(() => t.status === r.NotLoggedIn ? (o(t.loginPath, { state: { from: e } }), !1) : !0, [t, e, o]);
+  return O(() => t.status === s.NotLoggedIn ? (o(t.loginPath, { state: { from: e } }), !1) : !0, [t, e, o]);
 }
 export {
-  V as AuthProvider,
-  r as AuthStatus,
-  j as RedirectAfterAuth,
-  z as RequireAuth,
+  j as AuthProvider,
+  s as AuthStatus,
+  z as RedirectAfterAuth,
+  B as RequireAuth,
   p as useAuth,
-  T as useLogin,
-  B as useLogout,
-  M as useRegister,
+  C as useLogin,
+  M as useLogout,
+  V as useRegister,
   $ as useRequireAuth
 };
