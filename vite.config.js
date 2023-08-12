@@ -21,9 +21,9 @@ export default defineConfig({
       fileName: (format) => {
         switch (format) {
           case 'cjs':
-            return 'index.cjs';
-          case 'es':
             return 'index.js';
+          case 'es':
+            return 'index.mjs';
           default:
             return 'index.' + format + '.js';
         }
