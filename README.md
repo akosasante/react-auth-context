@@ -17,7 +17,7 @@ npm i akosasante/react-auth-context axios react-router-dom
 
 ```jsx
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { AuthProvider } from '@akosasante/react-auth-context';
+import { AuthProvider } from 'akosasante/react-auth-context';
 
 /**
  * You can configure AuthProvider with the following props:
