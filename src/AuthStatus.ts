@@ -6,7 +6,5 @@ export enum AuthStatus {
   // The user has not logged in yet.
   NotLoggedIn = 'not_logged_in',
   // The user has manually logged out.
-  LoggedOut = 'logged_out',
-  // The authentication token expired.
-  Expired = 'expired',
+  LoggedOut = 'logged_out'
 }
