@@ -15,6 +15,9 @@ const packageJson = await getPackageJson();
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    commonjsOptions: {
+      transformMixedEsModules: true
+    },
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'react-auth-context',
