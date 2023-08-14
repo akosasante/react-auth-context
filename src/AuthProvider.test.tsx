@@ -1,15 +1,22 @@
 import { act, render, screen } from '@testing-library/react';
-import { AuthStatus } from './AuthStatus.ts';
+import { AuthStatus } from './AuthStatus';
 import { AuthProvider } from './AuthProvider';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { useAuth } from './useAuth';
 import React from 'react';
 
+type User = {
+  user: {
+    id: string,
+    name: string
+  }
+}
+
 const renderAppWithStatusAndUser = () => {
   // Create a test component that consumes the Context
   const TestComponent = () => {
-    const { status, user } = useAuth();
+    const { status, user } = useAuth<User>();
     return (
       <div>
         <p>{status}</p>
@@ -53,7 +60,7 @@ const renderAppWithStatus = () => {
   return render(<App />);
 };
 
-let axiosMock;
+let axiosMock: MockAdapter;
 beforeEach(() => {
   // This sets the mock adapter on the default instance
   axiosMock = new MockAdapter(axios);
@@ -77,7 +84,7 @@ test('renders the component when wrapped with Context', async () => {
   // Wrap the test component with the Context Provider
   const App = () => {
     return (
-      <AuthProvider value={null}>
+      <AuthProvider >
         <TestComponent />
       </AuthProvider>
     );

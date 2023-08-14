@@ -25,5 +25,5 @@ export const AuthContext = createContext<AuthContextValue>({
   fetchUser: () => null,
   loginPath: '/login',
   logoutRedirectPath: '/',
-  defaultAxiosOptions: null,
+  defaultAxiosOptions: undefined,
 });

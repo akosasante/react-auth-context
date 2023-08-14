@@ -6,14 +6,21 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { AuthStatus } from './AuthStatus.ts';
+import { AuthStatus } from './AuthStatus';
 import { AuthProvider } from './AuthProvider';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { useLogin } from './useLogin.ts';
-import { useAuth } from './useAuth.ts';
+import { useLogin } from './useLogin';
+import { useAuth } from './useAuth';
 
-let axiosMock;
+type User = {
+  user: {
+    id: string,
+    name: string
+  }
+}
+
+let axiosMock: MockAdapter;
 beforeEach(() => {
   // This sets the mock adapter on the default instance
   axiosMock = new MockAdapter(axios);
@@ -35,16 +42,16 @@ test('if login is successful, should be able to grab user name from context and 
     const [email, _setEmail] = React.useState(defaultEmail);
     const [password, _setPassword] = React.useState(defaultPassword);
 
-    const { submit, _errors, _loading } = useLogin(
+    const { submit, errors: _errors, loading: _loading } = useLogin(
       { email, password },
       { getJwtTokenFromResponse: false },
     );
-    const { status, user } = useAuth();
+    const { status, user } = useAuth<User>();
 
     return (
       <div>
         <p>{status}</p>
-        <p>{user?.name}</p>
+        <p>{user?.user?.name}</p>
         <button onClick={submit}>Login</button>
       </div>
     );
@@ -88,16 +95,16 @@ test('if login is fails, should be able to grab error from context and render', 
     const [email, _setEmail] = React.useState(defaultEmail);
     const [password, _setPassword] = React.useState(defaultPassword);
 
-    const { submit, errors, _loading } = useLogin(
+    const { submit, errors, loading: _loading } = useLogin(
       { email, password },
       { getJwtTokenFromResponse: false },
     );
-    const { status, user } = useAuth();
+    const { status, user } = useAuth<User>();
 
     return (
       <div>
         <p>{status}</p>
-        {user && <p>{user?.name}</p>}
+        {user && <p>{user?.user?.name}</p>}
         {errors && <p>{JSON.stringify(errors)}</p>}
         <button onClick={submit}>Login</button>
       </div>
