@@ -19,9 +19,10 @@ export function useLogout(options?: UseLogoutOptions) {
     setLoading(true);
     return axios
       .post(apiUrl)
-      .then(() => {
+      .then((res) => {
         setStatus(AuthStatus.LoggedOut);
         setUser(null);
+        return res;
       })
       .catch(errorHandler)
       .finally(() => {

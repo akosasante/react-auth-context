@@ -51,6 +51,7 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
           setToken(getJwtTokenFromResponse(res.data));
         }
         setErrors(null);
+        return res;
       })
       .catch((err) => {
         setErrors(err.response?.data || err.message || 'Unknown error');

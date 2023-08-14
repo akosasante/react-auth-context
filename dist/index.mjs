@@ -31,32 +31,32 @@ const P = w({
   }, [t, o]), [o, n];
 };
 function z({ children: t, fetchUserInterval: e = 0, getCurrentUserPath: o = "/user", loginPath: n = "/login", logoutRedirectPath: r = "/", defaultAxiosOptions: l = {} }) {
-  const a = j(), [d, c] = y("auth_status", u.NotSure), [b, m] = y("auth_user", null), [h, N] = y("auth_token", null), [O, U] = v(0);
+  const c = j(), [d, i] = y("auth_status", u.NotSure), [b, m] = y("auth_user", null), [h, N] = y("auth_token", null), [O, U] = v(0);
   h && (S.defaults.headers.Authorization = `Bearer ${h}`);
   const g = x(() => {
-    a.current = S.get(o, l).then((i) => {
-      c(u.LoggedIn), m(i.data);
-    }).catch((i) => {
-      console.error(i), c(u.NotLoggedIn);
+    c.current = S.get(o, l).then((a) => {
+      i(u.LoggedIn), m(a.data);
+    }).catch((a) => {
+      console.error(a), i(u.NotLoggedIn);
     });
   }, []);
   if (_(() => {
     g();
   }, [g, O]), _(() => {
-    let i = 0;
-    return e > 0 && (i = window.setInterval(g, Math.max(e, 3e3))), () => {
-      clearInterval(i);
+    let a = 0;
+    return e > 0 && (a = window.setInterval(g, Math.max(e, 3e3))), () => {
+      clearInterval(a);
     };
-  }, [g, e]), d === u.NotSure && a.current)
-    throw a.current;
+  }, [g, e]), d === u.NotSure && c.current)
+    throw c.current;
   return L(P.Provider, { value: {
     status: d,
-    setStatus: c,
+    setStatus: i,
     user: b,
     setUser: m,
     token: h,
     setToken: N,
-    fetchUser: () => U((i) => i + 1),
+    fetchUser: () => U((a) => a + 1),
     loginPath: n,
     logoutRedirectPath: r,
     defaultAxiosOptions: l
@@ -80,10 +80,8 @@ function F(t, e) {
   const { errorHandler: o = (s) => console.error(s), apiUrl: n = "/login", getUserFromResponse: r = (s) => s == null ? void 0 : s.user, getJwtTokenFromResponse: l = (s) => {
     var f;
     return ((f = s == null ? void 0 : s.token) === null || f === void 0 ? void 0 : f.token) || (s == null ? void 0 : s.token);
-  }, actionAxiosOptions: a = null } = e || {}, { setStatus: d, setUser: c, setToken: b, fetchUser: m, defaultAxiosOptions: h } = p(), [N, O] = v(!1), [U, g] = v(null);
-  return { submit: () => (O(!0), S.post(n, t, a || h || {}).then((s) => {
-    d(u.LoggedIn), typeof r == "function" ? c(r(s.data)) : m(), typeof l == "function" && b(l(s.data)), g(null);
-  }).catch((s) => {
+  }, actionAxiosOptions: c = null } = e || {}, { setStatus: d, setUser: i, setToken: b, fetchUser: m, defaultAxiosOptions: h } = p(), [N, O] = v(!1), [U, g] = v(null);
+  return { submit: () => (O(!0), S.post(n, t, c || h || {}).then((s) => (d(u.LoggedIn), typeof r == "function" ? i(r(s.data)) : m(), typeof l == "function" && b(l(s.data)), g(null), s)).catch((s) => {
     var f;
     g(((f = s.response) === null || f === void 0 ? void 0 : f.data) || s.message || "Unknown error"), o && o(s);
   }).finally(() => {
@@ -91,11 +89,9 @@ function F(t, e) {
   })), loading: N, errors: U };
 }
 function V(t) {
-  const { errorHandler: e = (c) => console.error(c), apiUrl: o = "/logout" } = t || {}, { setStatus: n, setUser: r } = p(), [l, a] = v(!1);
-  return { submit: () => (a(!0), S.post(o).then(() => {
-    n(u.LoggedOut), r(null);
-  }).catch(e).finally(() => {
-    a(!1);
+  const { errorHandler: e = (i) => console.error(i), apiUrl: o = "/logout" } = t || {}, { setStatus: n, setUser: r } = p(), [l, c] = v(!1);
+  return { submit: () => (c(!0), S.post(o).then((i) => (n(u.LoggedOut), r(null), i)).catch(e).finally(() => {
+    c(!1);
   })), loading: l };
 }
 var q = globalThis && globalThis.__rest || function(t, e) {
