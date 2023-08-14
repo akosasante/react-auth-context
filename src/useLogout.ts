@@ -17,7 +17,7 @@ export function useLogout(options?: UseLogoutOptions) {
   const [loading, setLoading] = useState(false);
   const submit = () => {
     setLoading(true);
-    axios
+    return axios
       .post(apiUrl)
       .then(() => {
         setStatus(AuthStatus.LoggedOut);

@@ -33,7 +33,7 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
   // same logic is also used for register
   const submit = () => {
     setLoading(true);
-    axios
+    return axios
       .post(
         apiUrl,
         requestBody,

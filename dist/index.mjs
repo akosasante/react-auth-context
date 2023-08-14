@@ -81,26 +81,22 @@ function F(t, e) {
     var f;
     return ((f = s == null ? void 0 : s.token) === null || f === void 0 ? void 0 : f.token) || (s == null ? void 0 : s.token);
   }, actionAxiosOptions: a = null } = e || {}, { setStatus: d, setUser: c, setToken: b, fetchUser: m, defaultAxiosOptions: h } = p(), [N, O] = v(!1), [U, g] = v(null);
-  return { submit: () => {
-    O(!0), S.post(n, t, a || h || {}).then((s) => {
-      d(u.LoggedIn), typeof r == "function" ? c(r(s.data)) : m(), typeof l == "function" && b(l(s.data)), g(null);
-    }).catch((s) => {
-      var f;
-      g(((f = s.response) === null || f === void 0 ? void 0 : f.data) || s.message || "Unknown error"), o && o(s);
-    }).finally(() => {
-      O(!1);
-    });
-  }, loading: N, errors: U };
+  return { submit: () => (O(!0), S.post(n, t, a || h || {}).then((s) => {
+    d(u.LoggedIn), typeof r == "function" ? c(r(s.data)) : m(), typeof l == "function" && b(l(s.data)), g(null);
+  }).catch((s) => {
+    var f;
+    g(((f = s.response) === null || f === void 0 ? void 0 : f.data) || s.message || "Unknown error"), o && o(s);
+  }).finally(() => {
+    O(!1);
+  })), loading: N, errors: U };
 }
 function V(t) {
   const { errorHandler: e = (c) => console.error(c), apiUrl: o = "/logout" } = t || {}, { setStatus: n, setUser: r } = p(), [l, a] = v(!1);
-  return { submit: () => {
-    a(!0), S.post(o).then(() => {
-      n(u.LoggedOut), r(null);
-    }).catch(e).finally(() => {
-      a(!1);
-    });
-  }, loading: l };
+  return { submit: () => (a(!0), S.post(o).then(() => {
+    n(u.LoggedOut), r(null);
+  }).catch(e).finally(() => {
+    a(!1);
+  })), loading: l };
 }
 var q = globalThis && globalThis.__rest || function(t, e) {
   var o = {};
