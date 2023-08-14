@@ -7,7 +7,7 @@ const useLocalStorage = <T>(key: string, defaultValue: T) => {
       return storedValue ? JSON.parse(storedValue) : defaultValue;
     } catch (e) {
       console.error('Invalid JSON:', e);
-      return defaultValue
+      return defaultValue;
     }
   });
 

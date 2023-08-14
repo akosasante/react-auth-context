@@ -15,10 +15,10 @@ import { useAuth } from './useAuth';
 
 type User = {
   user: {
-    id: string,
-    name: string
-  }
-}
+    id: string;
+    name: string;
+  };
+};
 
 let axiosMock: MockAdapter;
 beforeEach(() => {
@@ -42,10 +42,11 @@ test('if login is successful, should be able to grab user name from context and 
     const [email, _setEmail] = React.useState(defaultEmail);
     const [password, _setPassword] = React.useState(defaultPassword);
 
-    const { submit, errors: _errors, loading: _loading } = useLogin(
-      { email, password },
-      { getJwtTokenFromResponse: false },
-    );
+    const {
+      submit,
+      errors: _errors,
+      loading: _loading,
+    } = useLogin({ email, password }, { getJwtTokenFromResponse: false });
     const { status, user } = useAuth<User>();
 
     return (
@@ -95,10 +96,11 @@ test('if login is fails, should be able to grab error from context and render', 
     const [email, _setEmail] = React.useState(defaultEmail);
     const [password, _setPassword] = React.useState(defaultPassword);
 
-    const { submit, errors, loading: _loading } = useLogin(
-      { email, password },
-      { getJwtTokenFromResponse: false },
-    );
+    const {
+      submit,
+      errors,
+      loading: _loading,
+    } = useLogin({ email, password }, { getJwtTokenFromResponse: false });
     const { status, user } = useAuth<User>();
 
     return (

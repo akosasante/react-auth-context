@@ -4,11 +4,11 @@ import { AxiosRequestConfig } from 'axios';
 
 export interface AuthContextValue<U = unknown> {
   status: AuthStatus;
-  setStatus: (status: AuthStatus) => void;
+  setStatus: (_status: AuthStatus) => void;
   user: U | null;
-  setUser: (user: U | null) => void;
+  setUser: (_user: U | null) => void;
   token: string | null;
-  setToken: (token: string | null) => void;
+  setToken: (_token: string | null) => void;
   fetchUser: () => void;
   loginPath: string;
   logoutRedirectPath: string;

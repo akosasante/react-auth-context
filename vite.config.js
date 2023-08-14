@@ -17,12 +17,12 @@ export default defineConfig({
   build: {
     target: 'modules',
     commonjsOptions: {
-      transformMixedEsModules: true
+      transformMixedEsModules: true,
     },
     rollupOptions: {
       output: {
-        interop: 'auto'
-      }
+        interop: 'auto',
+      },
     },
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

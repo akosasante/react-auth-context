@@ -8,10 +8,10 @@ import React from 'react';
 
 type User = {
   user: {
-    id: string,
-    name: string
-  }
-}
+    id: string;
+    name: string;
+  };
+};
 
 const renderAppWithStatusAndUser = () => {
   // Create a test component that consumes the Context
@@ -84,7 +84,7 @@ test('renders the component when wrapped with Context', async () => {
   // Wrap the test component with the Context Provider
   const App = () => {
     return (
-      <AuthProvider >
+      <AuthProvider>
         <TestComponent />
       </AuthProvider>
     );
