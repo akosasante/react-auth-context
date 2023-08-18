@@ -1,6 +1,6 @@
 {
   "name": "@akosasante/react-auth-context",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Context components & hooks for HTTP-Only-signed-cookie-based authentication",
   "keywords": [
     "react",

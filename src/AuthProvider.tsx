@@ -28,7 +28,7 @@ export function AuthProvider({
   logoutRedirectPath = '/',
   defaultAxiosOptions = {},
 }: AuthProviderProps) {
-  const promiseRef = useRef<Promise<any>>();
+  const promiseRef = useRef<Promise<unknown>>();
   const [status, setStatus] = useLocalStorage(
     'auth_status',
     AuthStatus.NotSure,
@@ -52,7 +52,7 @@ export function AuthProvider({
         console.error(reason);
         setStatus(AuthStatus.NotLoggedIn);
       });
-  }, []);
+  }, [defaultAxiosOptions, getCurrentUserPath, setStatus, setUser]);
 
   // Fetch user on demand
   useEffect(() => {
