@@ -32,7 +32,7 @@ export function AuthProvider({
   logLevel = null,
 }: AuthProviderProps) {
   const logMsg = useCallback(
-    (message, ...rest) => {
+    (message: string, ...rest: any[]) => {
       if (logLevel) {
         console[logLevel](`[react-auth-context]: ${message}`, ...rest);
       }

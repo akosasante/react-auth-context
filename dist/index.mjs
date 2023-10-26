@@ -1,12 +1,12 @@
-import { jsx as S, Fragment as P } from "react/jsx-runtime";
-import _ from "axios";
-import { createContext as w, useState as v, useEffect as b, useRef as j, useCallback as x, useContext as T } from "react";
-import { useLocation as U, Navigate as A, useNavigate as k } from "react-router-dom";
+import { jsx as L, Fragment as P } from "react/jsx-runtime";
+import y from "axios";
+import { createContext as j, useState as O, useEffect as N, useCallback as U, useRef as F, useContext as T } from "react";
+import { useLocation as A, Navigate as k, useNavigate as R } from "react-router-dom";
 var u;
 (function(t) {
   t.NotSure = "not_sure", t.LoggedIn = "logged_in", t.NotLoggedIn = "not_logged_in", t.LoggedOut = "logged_out";
 })(u || (u = {}));
-const R = w({
+const w = j({
   status: u.NotSure,
   setStatus: () => null,
   user: null,
@@ -16,109 +16,117 @@ const R = w({
   fetchUser: () => null,
   loginPath: "/login",
   logoutRedirectPath: "/",
-  defaultAxiosOptions: void 0
-}), I = (t, e) => {
-  const [o, n] = v(() => {
-    const r = localStorage.getItem(t);
+  defaultAxiosOptions: void 0,
+  logMsg: () => null
+}), I = (t, e, r) => {
+  const [n, s] = O(() => {
+    const l = localStorage.getItem(t);
     try {
-      return r ? JSON.parse(r) : e;
-    } catch (l) {
-      return console.error("Invalid JSON:", l), e;
+      return l ? JSON.parse(l) : e;
+    } catch (i) {
+      return r(`Invalid JSON parsed for parsing value from localstorage, will return default value (${e}): `, i), e;
     }
   });
-  return b(() => {
-    localStorage.setItem(t, o ? JSON.stringify(o) : JSON.stringify(e) || "{}");
-  }, [t, o]), [o, n];
+  return N(() => {
+    try {
+      localStorage.setItem(t, n ? JSON.stringify(n) : JSON.stringify(e) || "{}");
+    } catch (l) {
+      r(`Failed to save ${n} or default (${e}) in local storage: `, l);
+    }
+  }, [t, n]), [n, s];
 };
-function z({ children: t, fetchUserInterval: e = 0, getCurrentUserPath: o = "/user", loginPath: n = "/login", logoutRedirectPath: r = "/", defaultAxiosOptions: l = {} }) {
-  const g = j(), [h, i] = I("auth_status", u.NotSure), [O, a] = I("auth_user", null), [p, N] = I("auth_token", null), [L, y] = v(0);
-  p && (_.defaults.headers.Authorization = `Bearer ${p}`);
-  const f = x(() => {
-    g.current = _.get(o, l).then((c) => {
-      i(u.LoggedIn), a(c.data);
-    }).catch((c) => {
-      console.error(c), i(u.NotLoggedIn);
+function H({ children: t, fetchUserInterval: e = 0, getCurrentUserPath: r = "/user", loginPath: n = "/login", logoutRedirectPath: s = "/", defaultAxiosOptions: l = {}, logLevel: i = null }) {
+  const a = U((o, ...c) => {
+    i && console[i](`[react-auth-context]: ${o}`, ...c);
+  }, [i]), d = F(), [g, f] = I("auth_status", u.NotSure, a), [h, p] = I("auth_user", null, a), [v, _] = I("auth_token", null, a), [x, b] = O(0);
+  v && (y.defaults.headers.Authorization = `Bearer ${v}`);
+  const m = U(() => {
+    d.current = y.get(r, l).then((o) => {
+      f(u.LoggedIn), p(o.data);
+    }).catch((o) => {
+      a(o), f(u.NotLoggedIn);
     });
-  }, [l, o, i, a]);
-  if (b(() => {
-    f();
-  }, [f, L]), b(() => {
-    let c = 0;
-    return e > 0 && (c = window.setInterval(f, Math.max(e, 3e3))), () => {
-      clearInterval(c);
+  }, [l, r, f, p]);
+  if (N(() => {
+    m();
+  }, [m, x]), N(() => {
+    let o = 0;
+    return e > 0 && (o = window.setInterval(m, Math.max(e, 3e3))), () => {
+      clearInterval(o);
     };
-  }, [f, e]), h === u.NotSure && g.current)
-    throw g.current;
-  return S(R.Provider, { value: {
-    status: h,
-    setStatus: i,
-    user: O,
-    setUser: a,
-    token: p,
-    setToken: N,
-    fetchUser: () => y((c) => c + 1),
+  }, [m, e]), g === u.NotSure && d.current)
+    throw d.current;
+  return L(w.Provider, { value: {
+    status: g,
+    setStatus: f,
+    user: h,
+    setUser: p,
+    token: v,
+    setToken: _,
+    fetchUser: () => b((o) => o + 1),
     loginPath: n,
-    logoutRedirectPath: r,
-    defaultAxiosOptions: l
+    logoutRedirectPath: s,
+    defaultAxiosOptions: l,
+    logMsg: a
   }, children: t });
 }
-function m() {
-  return T(R);
+function S() {
+  return T(w);
 }
-function B({ to: t }) {
-  var e, o;
-  const n = m(), r = U();
-  return n.status === u.LoggedIn ? S(A, { to: ((o = (e = r.state) === null || e === void 0 ? void 0 : e.from) === null || o === void 0 ? void 0 : o.pathname) || t || "/" }) : null;
+function z({ to: t }) {
+  var e, r;
+  const n = S(), s = A();
+  return n.status === u.LoggedIn ? L(k, { to: ((r = (e = s.state) === null || e === void 0 ? void 0 : e.from) === null || r === void 0 ? void 0 : r.pathname) || t || "/" }) : null;
 }
-function M({ children: t }) {
-  const e = m(), o = U(), n = k();
-  return b(() => {
+function B({ children: t }) {
+  const e = S(), r = A(), n = R();
+  return N(() => {
     e.status === u.LoggedOut && (n(e.logoutRedirectPath), e.setStatus(u.NotLoggedIn));
-  }, [e, n]), e.status === u.NotLoggedIn ? S(A, { to: e.loginPath, state: { from: o } }) : S(P, { children: t });
+  }, [e, n]), e.status === u.NotLoggedIn ? L(k, { to: e.loginPath, state: { from: r } }) : L(P, { children: t });
 }
-function F(t, e) {
-  const { errorHandler: o = (s) => console.error(s), apiUrl: n = "/login", getUserFromResponse: r = (s) => s == null ? void 0 : s.user, getJwtTokenFromResponse: l = (s) => {
-    var d;
-    return ((d = s == null ? void 0 : s.token) === null || d === void 0 ? void 0 : d.token) || (s == null ? void 0 : s.token);
-  }, actionAxiosOptions: g = null } = e || {}, { setStatus: h, setUser: i, setToken: O, fetchUser: a, defaultAxiosOptions: p } = m(), [N, L] = v(!1), [y, f] = v(null);
-  return { submit: () => (L(!0), _.post(n, t, g || p || {}).then((s) => (h(u.LoggedIn), typeof r == "function" ? i(r(s.data)) : a(), typeof l == "function" && O(l(s.data)), f(null), s)).catch((s) => {
-    var d;
-    f(((d = s.response) === null || d === void 0 ? void 0 : d.data) || s.message || "Unknown error"), o && o(s);
+function J(t, e) {
+  const { setStatus: r, setUser: n, setToken: s, fetchUser: l, defaultAxiosOptions: i, logMsg: a } = S(), { apiUrl: d = "/login", getUserFromResponse: g = (o) => o == null ? void 0 : o.user, getJwtTokenFromResponse: f = (o) => {
+    var c;
+    return ((c = o == null ? void 0 : o.token) === null || c === void 0 ? void 0 : c.token) || (o == null ? void 0 : o.token);
+  }, actionAxiosOptions: h = null, errorHandler: p = (o) => a(o) } = e || {}, [v, _] = O(!1), [x, b] = O(null);
+  return { submit: () => (_(!0), y.post(d, t, h || i || {}).then((o) => (r(u.LoggedIn), typeof g == "function" ? n(g(o.data)) : l(), typeof f == "function" && s(f(o.data)), b(null), o)).catch((o) => {
+    var c;
+    b(((c = o.response) === null || c === void 0 ? void 0 : c.data) || o.message || "Unknown error"), p && p(o);
   }).finally(() => {
-    L(!1);
-  })), loading: N, errors: y };
+    _(!1);
+  })), loading: v, errors: x };
 }
-function $(t) {
-  const { errorHandler: e = (a) => console.error(a), apiUrl: o = "/logout", actionAxiosOptions: n = null } = t || {}, { setStatus: r, setUser: l, defaultAxiosOptions: g } = m(), [h, i] = v(!1);
-  return { submit: () => (i(!0), _.post(o, null, n || g || {}).then((a) => (r(u.LoggedOut), l(null), a)).catch(e).finally(() => {
-    i(!1);
-  })), loading: h };
+function D(t) {
+  const { setStatus: e, setUser: r, defaultAxiosOptions: n, logMsg: s } = S(), { errorHandler: l = (h) => s(h), apiUrl: i = "/logout", actionAxiosOptions: a = null } = t || {}, [d, g] = O(!1);
+  return { submit: () => (g(!0), y.post(i, null, a || n || {}).then((h) => (e(u.LoggedOut), r(null), h)).catch(l).finally(() => {
+    g(!1);
+  })), loading: d };
 }
-var J = globalThis && globalThis.__rest || function(t, e) {
-  var o = {};
+var $ = globalThis && globalThis.__rest || function(t, e) {
+  var r = {};
   for (var n in t)
-    Object.prototype.hasOwnProperty.call(t, n) && e.indexOf(n) < 0 && (o[n] = t[n]);
+    Object.prototype.hasOwnProperty.call(t, n) && e.indexOf(n) < 0 && (r[n] = t[n]);
   if (t != null && typeof Object.getOwnPropertySymbols == "function")
-    for (var r = 0, n = Object.getOwnPropertySymbols(t); r < n.length; r++)
-      e.indexOf(n[r]) < 0 && Object.prototype.propertyIsEnumerable.call(t, n[r]) && (o[n[r]] = t[n[r]]);
-  return o;
+    for (var s = 0, n = Object.getOwnPropertySymbols(t); s < n.length; s++)
+      e.indexOf(n[s]) < 0 && Object.prototype.propertyIsEnumerable.call(t, n[s]) && (r[n[s]] = t[n[s]]);
+  return r;
 };
-function D(t, e) {
-  const o = e || {}, { apiUrl: n = "/register" } = o, r = J(o, ["apiUrl"]);
-  return F(t, Object.assign({ apiUrl: n }, r));
+function G(t, e) {
+  const r = e || {}, { apiUrl: n = "/register" } = r, s = $(r, ["apiUrl"]);
+  return J(t, Object.assign({ apiUrl: n }, s));
 }
-function G() {
-  const t = m(), e = U(), o = k();
-  return x(() => t.status === u.NotLoggedIn ? (o(t.loginPath, { state: { from: e } }), !1) : !0, [t, e, o]);
+function K() {
+  const t = S(), e = A(), r = R();
+  return U(() => t.status === u.NotLoggedIn ? (r(t.loginPath, { state: { from: e } }), !1) : !0, [t, e, r]);
 }
 export {
-  z as AuthProvider,
+  H as AuthProvider,
   u as AuthStatus,
-  B as RedirectAfterAuth,
-  M as RequireAuth,
-  m as useAuth,
-  F as useLogin,
-  $ as useLogout,
-  D as useRegister,
-  G as useRequireAuth
+  z as RedirectAfterAuth,
+  B as RequireAuth,
+  S as useAuth,
+  J as useLogin,
+  D as useLogout,
+  G as useRegister,
+  K as useRequireAuth
 };
