@@ -10,12 +10,15 @@ export interface UseLogoutOptions {
 }
 
 export function useLogout(options?: UseLogoutOptions) {
+  // extract auth context
+  const { setStatus, setUser, defaultAxiosOptions, logMsg } = useAuth();
+
+  // extract user options, with default fallbacks
   const {
-    errorHandler = (reason: any) => console.error(reason),
+    errorHandler = (reason: any) => logMsg(reason),
     apiUrl = '/logout',
     actionAxiosOptions = null,
   } = options || {};
-  const { setStatus, setUser, defaultAxiosOptions } = useAuth();
   const [loading, setLoading] = useState(false);
   const submit = () => {
     setLoading(true);

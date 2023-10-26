@@ -13,6 +13,7 @@ export interface AuthContextValue<U = unknown> {
   loginPath: string;
   logoutRedirectPath: string;
   defaultAxiosOptions?: AxiosRequestConfig;
+  logMsg: (msg: string, ...rest: any[]) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -26,4 +27,5 @@ export const AuthContext = createContext<AuthContextValue>({
   loginPath: '/login',
   logoutRedirectPath: '/',
   defaultAxiosOptions: undefined,
+  logMsg: () => null,
 });

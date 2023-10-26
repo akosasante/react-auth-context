@@ -12,18 +12,24 @@ export interface UseLoginOptions {
 }
 
 export function useLogin(requestBody: any, options?: UseLoginOptions) {
-  // extract options
+  // extract auth context
   const {
-    errorHandler = (reason: any) => console.error(reason),
+    setStatus,
+    setUser,
+    setToken,
+    fetchUser,
+    defaultAxiosOptions,
+    logMsg,
+  } = useAuth();
+
+  // extract options, with default fallbacks
+  const {
     apiUrl = '/login',
     getUserFromResponse = (data: any) => data?.user,
     getJwtTokenFromResponse = (data: any) => data?.token?.token || data?.token,
     actionAxiosOptions = null,
+    errorHandler = (reason: any) => logMsg(reason),
   } = options || {};
-
-  // extract auth context
-  const { setStatus, setUser, setToken, fetchUser, defaultAxiosOptions } =
-    useAuth();
 
   // set up state
   const [loading, setLoading] = useState(false);
@@ -40,7 +46,9 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
         actionAxiosOptions || defaultAxiosOptions || {},
       )
       .then((res) => {
+        // console.log("THENNNNN")
         setStatus(AuthStatus.LoggedIn);
+        // console.log("Status has been updated");
         if (typeof getUserFromResponse === 'function') {
           setUser(getUserFromResponse(res.data));
         } else {

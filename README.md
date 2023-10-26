@@ -23,11 +23,12 @@ import { AuthProvider } from '@akosasante/react-auth-context';
 
 /**
  * You can configure AuthProvider with the following props:
- * fetchUserInterval: number of milliseconds to wait before automatically trying to fetch the user again (default: 0/disabled)
+ * fetchUserInterval: number of milliseconds to wait before automatically trying to fetch the user again (default: 0/disabled). Otherwise, it will be fetched whenever this context is re-rendered (so if it's nested in a router context, this will be on each route change)
  * getCurrentUserPath: path to fetch the current user from the backend (default: '/user')
  * loginPath: frontend path to the login page. Used by the `requireAuth` hook and component to redirect the user if they're not logged in (default: '/login')
  * logoutRedirectPath: frontend path to redirect the user to after they've logged out on a protected page (default: '/')
  * defaultAxiosOptions: Axios request config to use in all calls (unless overridden)
+ * logLevel: Can be: 'debug', 'info', 'warn', 'error', or null(default: null). If set to a non-null value, will log to the console when errors occur in the AuthProvider.
  */
 const App = () => {
   return;

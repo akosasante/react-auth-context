@@ -18,6 +18,8 @@ export interface AuthProviderProps {
   logoutRedirectPath?: string;
   /** Axios request config to use in all calls (unless overridden) */
   defaultAxiosOptions?: AxiosRequestConfig;
+  /** Log level, or null if you want to suppress logs from this library */
+  logLevel?: 'debug' | 'info' | 'warn' | 'error' | null;
 }
 
 export function AuthProvider({
@@ -27,14 +29,30 @@ export function AuthProvider({
   loginPath = '/login',
   logoutRedirectPath = '/',
   defaultAxiosOptions = {},
+  logLevel = null,
 }: AuthProviderProps) {
+  const logMsg = useCallback(
+    (message, ...rest) => {
+      if (logLevel) {
+        console[logLevel](`[react-auth-context]: ${message}`, ...rest);
+      }
+    },
+    [logLevel],
+  );
+
   const promiseRef = useRef<Promise<unknown>>();
+
   const [status, setStatus] = useLocalStorage(
     'auth_status',
     AuthStatus.NotSure,
+    logMsg,
   );
-  const [user, setUser] = useLocalStorage<any>('auth_user', null);
-  const [token, setToken] = useLocalStorage<string | null>('auth_token', null);
+  const [user, setUser] = useLocalStorage<any>('auth_user', null, logMsg);
+  const [token, setToken] = useLocalStorage<string | null>(
+    'auth_token',
+    null,
+    logMsg,
+  );
   const [shouldFetchUser, setShouldFetchUser] = useState(0);
 
   if (token) {
@@ -49,7 +67,7 @@ export function AuthProvider({
         setUser(res.data);
       })
       .catch((reason) => {
-        console.error(reason);
+        logMsg(reason);
         setStatus(AuthStatus.NotLoggedIn);
       });
   }, [defaultAxiosOptions, getCurrentUserPath, setStatus, setUser]);
@@ -74,6 +92,8 @@ export function AuthProvider({
     throw promiseRef.current; // Trigger suspense
   }
 
+  // console.log("HAS STATUS CHANGED? : ", status)
+
   return (
     <AuthContext.Provider
       value={{
@@ -87,6 +107,7 @@ export function AuthProvider({
         loginPath,
         logoutRedirectPath,
         defaultAxiosOptions,
+        logMsg,
       }}
     >
       {children}
