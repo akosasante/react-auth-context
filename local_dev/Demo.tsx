@@ -5,7 +5,7 @@ import {
   useAuth,
   useLogin,
   useLogout,
-} from '@akosasante/react-auth-context';
+} from '../src/index';
 import { Suspense, useState } from 'react';
 import { Link, MemoryRouter, Route, Routes } from 'react-router-dom';
 
