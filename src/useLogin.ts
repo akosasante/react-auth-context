@@ -46,9 +46,7 @@ export function useLogin(requestBody: any, options?: UseLoginOptions) {
         actionAxiosOptions || defaultAxiosOptions || {},
       )
       .then((res) => {
-        // console.log("THENNNNN")
         setStatus(AuthStatus.LoggedIn);
-        // console.log("Status has been updated");
         if (typeof getUserFromResponse === 'function') {
           setUser(getUserFromResponse(res.data));
         } else {

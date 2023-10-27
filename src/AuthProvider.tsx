@@ -69,6 +69,7 @@ export function AuthProvider({
       .catch((reason) => {
         logMsg(reason);
         setStatus(AuthStatus.NotLoggedIn);
+        setUser(null);
       });
   }, [defaultAxiosOptions, getCurrentUserPath, setStatus, setUser]);
 
@@ -91,8 +92,6 @@ export function AuthProvider({
   if (status === AuthStatus.NotSure && promiseRef.current) {
     throw promiseRef.current; // Trigger suspense
   }
-
-  // console.log("HAS STATUS CHANGED? : ", status)
 
   return (
     <AuthContext.Provider
