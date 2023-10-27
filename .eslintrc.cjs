@@ -20,8 +20,8 @@ module.exports = {
   overrides: [
     {
       files: ['*.test.ts', '*.test.tsx', '*.test.jsx', '*.test.js'],
-      plugins: ['jest'],
-      extends: ['plugin:jest/recommended'],
+      plugins: ['jest', 'jest-dom'],
+      extends: ['plugin:jest/recommended', 'plugin:jest-dom/recommended'],
       env: { 'jest/globals': true },
     },
   ],
