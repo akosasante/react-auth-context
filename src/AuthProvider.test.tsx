@@ -1,4 +1,4 @@
-import {act, render, screen, waitFor} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { AuthStatus } from './AuthStatus';
 import { AuthProvider } from './AuthProvider';
 import axios from 'axios';
@@ -170,9 +170,11 @@ test('if axios options are passed in, use them', async () => {
 
   render(<App />);
 
-  expect(screen.getByText(AuthStatus.LoggedIn)).toBeInTheDocument();
-  const request = axiosMock.history.get[0];
-  expect(request.headers).toMatchObject({ 'My-Header': 'My-Value' });
+  await waitFor(() => {
+    expect(screen.getByText(AuthStatus.LoggedIn)).toBeInTheDocument();
+    const request = axiosMock.history.get[0];
+    expect(request.headers).toMatchObject({ 'My-Header': 'My-Value' });
+  });
 });
 
 test('if fetch user is successful, should be able to grab user name from context and render', async () => {

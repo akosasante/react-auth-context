@@ -44,7 +44,7 @@ function H({ children: t, fetchUserInterval: e = 0, getCurrentUserPath: r = "/us
     d.current = y.get(r, l).then((o) => {
       f(u.LoggedIn), p(o.data);
     }).catch((o) => {
-      a(o), f(u.NotLoggedIn);
+      a(o), f(u.NotLoggedIn), p(null);
     });
   }, [l, r, f, p]);
   if (N(() => {
